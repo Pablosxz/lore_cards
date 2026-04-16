@@ -6,4 +6,9 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: { case_sensitive: false },
                        format: { with: /\A[a-zA-Z0-9_]+\z/, message: "só pode conter letras, números e _" }
+
+  def self.find_for_database_authentication(conditions)
+    conditions[:username] = conditions[:username].downcase if conditions[:username]
+    find_by(username: conditions[:username])
+  end
 end
