@@ -1,0 +1,67 @@
+pt-BR:
+  errors:
+    messages:
+      not_saved:
+        one: "Não foi possível salvar: 1 erro encontrado."
+        other: "Não foi possível salvar: %{count} erros encontrados."
+
+  activerecord:
+    models:
+      user: "usuário"
+    attributes:
+      user:
+        username: "Nome de usuário"
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+
+  devise:
+    sessions:
+      signed_in: "Login realizado com sucesso."
+      signed_out: "Logout realizado com sucesso."
+      already_signed_in: "Você já está autenticado."
+      new:
+        sign_in: "Entrar"
+    registrations:
+      signed_up: "Cadastro realizado com sucesso."
+      signed_up_but_unconfirmed: "Cadastro realizado. Confirme seu e-mail para continuar."
+      update_needs_confirmation: "Conta atualizada. Confirme o novo e-mail."
+      updated: "Conta atualizada com sucesso."
+      destroyed: "Conta cancelada."
+      new:
+        sign_up: "Cadastrar-se"
+    passwords:
+      send_instructions: "Você receberá um e-mail com instruções para redefinir sua senha."
+      updated: "Senha alterada com sucesso."
+      updated_not_active: "Senha alterada. Faça login para continuar."
+      send_paranoid_instructions: "Se seu e-mail existir em nossa base, você receberá as instruções em breve."
+      no_token: "Acesse este link somente pelo e-mail de redefinição de senha."
+    confirmations:
+      send_instructions: "Você receberá um e-mail com instruções de confirmação em breve."
+      send_paranoid_instructions: "Se seu e-mail existir em nossa base, você receberá as instruções em breve."
+      confirmed: "E-mail confirmado com sucesso."
+    unlocks:
+      send_instructions: "Você receberá um e-mail com instruções para desbloquear sua conta."
+      unlocked: "Conta desbloqueada com sucesso."
+      send_paranoid_instructions: "Se sua conta existir em nossa base, você receberá as instruções em breve."
+    mailer:
+      confirmation_instructions:
+        subject: "Instruções de confirmação"
+      reset_password_instructions:
+        subject: "Instruções para redefinição de senha"
+      unlock_instructions:
+        subject: "Instruções para desbloqueio de conta"
+      email_changed:
+        subject: "E-mail alterado"
+      password_change:
+        subject: "Senha alterada"
+    failure:
+      already_authenticated: "Você já está autenticado."
+      unauthenticated: "Faça login para continuar."
+      unconfirmed: "Confirme seu e-mail antes de continuar."
+      locked: "Sua conta está bloqueada."
+      last_attempt: "Mais uma tentativa incorreta bloqueará sua conta."
+      not_found_in_database: "Nome de usuário ou senha inválidos."
+      invalid: "Nome de usuário ou senha inválidos."
+      timeout: "Sessão expirada. Faça login novamente."
+      inactive: "Sua conta ainda não foi ativada."
