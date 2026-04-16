@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Lore Cards" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-[#0f1424] min-h-screen">
+    <% if notice %>
+      <div class="fixed top-4 right-4 p-4 text-sm text-green-800 rounded-lg bg-green-50 z-50" role="alert"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="fixed top-4 right-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 z-50" role="alert"><%= alert %></div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

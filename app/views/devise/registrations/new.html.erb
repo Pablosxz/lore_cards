@@ -1,29 +1,78 @@
-<h2>Sign up</h2>
+<div class="flex min-h-screen">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+  <%# Left: illustration %>
+  <div class="hidden lg:flex w-1/2 items-center justify-center bg-[#0f1424]">
+    <%= image_tag "image-cadastro.png", class: "w-full h-full object-cover", alt: "Lore Cards" %>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
-    <% end %>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
+  <%# Right: form %>
+  <div class="flex flex-1 items-center justify-center px-8 py-12 bg-[#0f1424]">
+    <div class="w-full max-w-sm space-y-6">
+
+      <div class="space-y-2">
+        <h1 class="text-3xl font-bold text-white">Bem-Vindo, Mestre!</h1>
+        <p class="text-sm text-slate-400">
+          Seu próximo grande arco narrativo começa aqui. Seus monstros e itens esperam por você.
+        </p>
+      </div>
+
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <div class="space-y-4">
+
+          <div class="space-y-1">
+            <%= render_label name: "user_username", label: "Nome do usuário", class: "text-slate-200" %>
+            <%= render_input type: :text,
+                             name: "user[username]",
+                             id: "user_username",
+                             value: resource.username,
+                             placeholder: "mestre_supremo",
+                             required: true,
+                             autofocus: true,
+                             autocomplete: "username",
+                             class: "bg-[#1a2035] border-[#2a3354] text-white placeholder:text-slate-500 focus-visible:ring-violet-500" %>
+          </div>
+
+          <div class="space-y-1">
+            <%= render_label name: "user_email", label: "E-mail", class: "text-slate-200" %>
+            <%= render_input type: :email,
+                             name: "user[email]",
+                             id: "user_email",
+                             value: resource.email,
+                             placeholder: "mestre@exemplo.com",
+                             required: true,
+                             autocomplete: "email",
+                             class: "bg-[#1a2035] border-[#2a3354] text-white placeholder:text-slate-500 focus-visible:ring-violet-500" %>
+          </div>
+
+          <div class="space-y-1">
+            <%= render_label name: "user_password", label: "Senha", class: "text-slate-200" %>
+            <%= render_input type: :password,
+                             name: "user[password]",
+                             id: "user_password",
+                             required: true,
+                             autocomplete: "new-password",
+                             class: "bg-[#1a2035] border-[#2a3354] text-white placeholder:text-slate-500 focus-visible:ring-violet-500" %>
+          </div>
+
+          <%= button_tag type: "submit",
+                class: "w-full mt-2 inline-flex items-center justify-center rounded-md bg-violet-600 hover:bg-violet-700 text-white h-10 px-4 py-2 text-sm font-semibold transition-colors cursor-pointer" do %>
+            Cadastrar-se
+          <% end %>
+
+        </div>
+      <% end %>
+
+      <%- if devise_mapping.confirmable? && resource_name == :user %>
+      <% end %>
+
+      <p class="text-center text-sm text-slate-400">
+        Já possui uma conta?
+        <%= link_to "Entrar", new_session_path(resource_name), class: "font-semibold text-white underline-offset-4 hover:underline" %>
+      </p>
+
+    </div>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
