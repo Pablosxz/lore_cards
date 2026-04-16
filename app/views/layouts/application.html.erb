@@ -18,15 +18,19 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <% if notice %>
-        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert"><%= notice %></div>
-      <% end %>
-      <% if alert %>
-        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert"><%= alert %></div>
-      <% end %>
-      
+  <body class="bg-background text-foreground min-h-screen">
+    <% if notice %>
+      <div class="fixed top-4 right-4 z-50 rounded-md border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-400" role="alert">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="fixed top-4 right-4 z-50 rounded-md border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-400" role="alert">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <main class="min-h-screen">
       <%= yield %>
     </main>
   </body>
