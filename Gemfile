@@ -58,3 +58,5 @@ end
 
 gem "tailwindcss-rails", "~> 3.0"
 gem "shadcn-ui"
+
+gem "devise", "~> 5.0"

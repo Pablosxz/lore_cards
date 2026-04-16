@@ -20,6 +20,13 @@
 
   <body>
     <main class="container mx-auto mt-28 px-5 flex">
+      <% if notice %>
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert"><%= alert %></div>
+      <% end %>
+      
       <%= yield %>
     </main>
   </body>
