@@ -4,4 +4,14 @@
   <p class="text-muted-foreground max-w-sm">
     As próximas funcionalidades estão sendo forjadas. Seus cards de monstros e itens chegam em breve.
   </p>
+
+  <%# Verifica se o usuário tem uma sessão ativa %>
+  <% if user_signed_in? %>
+    <div class="mt-8">
+      <%= button_to "Log out", 
+                    destroy_user_session_path, 
+                    method: :delete, 
+                    class: "inline-flex items-center justify-center rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white h-10 px-4 py-2 text-sm font-semibold transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
 </div>
