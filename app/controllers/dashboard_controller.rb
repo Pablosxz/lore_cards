@@ -2,6 +2,7 @@ class DashboardController < ApplicationController
   before_action :authenticate_index, only: [:index]
 
   def index
+    redirect_to cards_path
   end
 
   private

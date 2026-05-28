@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  get "cards/index"
+  get "cards/new"
   devise_for :users
+
+  resources :cards
+  
   root "dashboard#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

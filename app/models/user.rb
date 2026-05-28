@@ -16,4 +16,6 @@ class User < ApplicationRecord
     conditions[:username] = conditions[:username].downcase if conditions[:username]
     find_by(username: conditions[:username])
   end
+
+  has_many :cards, dependent: :destroy
 end

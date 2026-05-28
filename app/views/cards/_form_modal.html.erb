@@ -1,0 +1,149 @@
+<div id="card-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm">
+  <div class="bg-[#0b0f19] border border-[#1e2646] rounded-xl w-full max-w-5xl p-8 relative flex flex-col max-h-[90vh] overflow-y-auto">
+    
+    <button onclick="document.getElementById('card_modal').innerHTML = ''" class="absolute top-6 right-6 text-slate-400 hover:text-white cursor-pointer z-10">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <h2 class="text-2xl font-bold text-white mb-6"><%= title %></h2>
+
+    <%= form_with model: card, local: true, class: "flex gap-8", id: "modal-form" do |f| %>      
+      <div class="flex-1 space-y-6">
+        <% if card.errors.any? %>
+          <div class="bg-red-950/50 border border-red-800 text-red-200 p-4 rounded-md text-sm space-y-1 mb-4">
+            <p class="font-semibold">O feitiço falhou. Não foi possível salvar:</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <% card.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div>
+          <%= f.label :name, "Nome da carta", class: "block text-sm text-slate-300 mb-2" %>
+          <%= f.text_field :name, id: "input-name", class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white focus:outline-none focus:border-violet-500" %>
+        </div>
+
+        <div>
+          <label class="block text-sm text-slate-300 mb-2">Tipo da carta</label>
+          <div class="flex space-x-2">
+            <label class="cursor-pointer">
+              <%= f.radio_button :category, "monster", class: "peer sr-only", id: "radio-monster" %>
+              <div class="px-6 py-1.5 rounded-full border border-[#1e2646] text-slate-400 peer-checked:bg-[#2e3658] peer-checked:text-white transition-colors">Monstro</div>
+            </label>
+            <label class="cursor-pointer">
+              <%= f.radio_button :category, "item", class: "peer sr-only", id: "radio-item" %>
+              <div class="px-6 py-1.5 rounded-full border border-[#1e2646] text-slate-400 peer-checked:bg-[#2e3658] peer-checked:text-white transition-colors">Item</div>
+            </label>
+          </div>
+        </div>
+
+        <div id="form-monster-attrs" class="grid grid-cols-2 gap-4">
+          <% ["health:Vida", "intelligence:Inteligência", "strength:Força", "physical:Físico", "agility:Agilidade", "mental:Mental"].each do |attr| %>
+            <% field, label = attr.split(":") %>
+            <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5">
+              <%= f.label field, label, class: "text-sm text-slate-300" %>
+              <%= f.number_field field, id: "input-#{field}", class: "w-16 bg-transparent text-right text-white focus:outline-none" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div id="form-item-attrs" class="hidden grid grid-cols-2 gap-4">
+          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :weight, "Peso", class: "text-sm text-slate-300" %><%= f.number_field :weight, step: "0.1", id: "input-weight", class: "w-16 bg-transparent text-right text-white focus:outline-none" %></div>
+          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :damage, "Dano", class: "text-sm text-slate-300" %><%= f.number_field :damage, id: "input-damage", class: "w-16 bg-transparent text-right text-white focus:outline-none" %></div>
+          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :rarity, "Raridade", class: "text-sm text-slate-300" %><%= f.text_field :rarity, id: "input-rarity", placeholder: "-", class: "w-20 bg-transparent text-right text-white text-xs focus:outline-none" %></div>
+          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :active_bonus, "Bônus", class: "text-sm text-slate-300" %><%= f.text_field :active_bonus, id: "input-active_bonus", placeholder: "-", class: "w-20 bg-transparent text-right text-white text-xs focus:outline-none" %></div>
+          <div class="col-span-2 flex items-center space-x-3 bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 mt-2"><%= f.check_box :consumable, id: "input-consumable", class: "h-4 w-4 rounded bg-transparent border-[#1e2646] text-violet-600 focus:ring-violet-500" %><%= f.label :consumable, "Este item é consumível", class: "text-sm text-slate-300 cursor-pointer" %></div>
+        </div>
+
+        <div class="space-y-2">
+          <%= f.label :description, "Descrição da carta", class: "block text-sm text-slate-300" %>
+          <%= f.text_area :description, rows: 3, class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white focus:outline-none focus:border-violet-500" %>
+        </div>
+
+        <div class="pt-4 flex justify-center">
+          <%= f.submit "Salvar", class: "w-40 bg-violet-600 hover:bg-violet-700 text-white py-2 rounded-md font-semibold cursor-pointer" %>
+        </div>
+      </div>
+
+      <div class="w-72 flex-shrink-0 flex items-center justify-center">
+         <div class="w-full bg-[#0a0d1a] border-2 border-[#1e2646] rounded-xl p-3 flex flex-col items-center">
+            <div class="w-full h-48 bg-[#11162d] border-2 border-dashed border-[#1e2646] rounded-lg mb-4 flex flex-col items-center justify-center text-slate-500 group-hover:bg-[#151b36] group-hover:border-[#2a3354] transition-all mt-4">
+                <svg class="w-8 h-8 mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="text-xs font-semibold uppercase tracking-wider opacity-60">Sem Imagem</span>
+            </div>
+            
+            <h3 id="preview-name" class="text-white font-bold text-lg text-center w-full truncate"><%= card.name.presence || "Nome da carta" %></h3>
+            <p id="preview-type" class="text-slate-400 text-xs mb-4"><%= card.item? ? "Item" : "Monstro" %></p>
+            
+            <div id="preview-monster-attrs" class="w-full grid grid-cols-2 gap-x-2 gap-y-1 text-[10px]">
+              <% ["health:Vida", "intelligence:Inteligência", "strength:Força", "physical:Físico", "agility:Agilidade", "mental:Mental"].each do |attr| %>
+                <% field, label = attr.split(":") %>
+                <div class="flex items-center justify-between"><span class="text-white font-semibold"><%= label %></span><span id="preview-val-<%= field %>" class="bg-[#1e2646] text-slate-300 px-2 py-0.5 rounded-sm"><%= card.send(field) || 0 %></span></div>
+              <% end %>
+            </div>
+
+            <div id="preview-item-attrs" class="w-full grid grid-cols-2 gap-x-2 gap-y-1 text-[10px]">
+              <% ["weight:Peso:0", "damage:Dano:0", "rarity:Raridade:-", "active_bonus:Bônus:-"].each do |attr| %>
+                <% field, label, default_val = attr.split(":") %>
+                <div class="flex items-center justify-between"><span class="text-white font-semibold"><%= label %></span><span id="preview-val-<%= field %>" class="bg-[#1e2646] text-slate-300 px-2 py-0.5 rounded-sm"><%= card.send(field).presence || default_val %></span></div>
+              <% end %>
+              <div class="flex items-center justify-between"><span class="text-white font-semibold">Consumível</span><span id="preview-val-consumable" class="bg-[#1e2646] text-slate-300 px-2 py-0.5 rounded-sm"><%= card.consumable ? "Sim" : "Não" %></span></div>
+            </div>
+         </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const inputName = document.getElementById("input-name");
+    const radioMonster = document.getElementById("radio-monster");
+    const radioItem = document.getElementById("radio-item");
+    const formMonsterAttrs = document.getElementById("form-monster-attrs");
+    const formItemAttrs = document.getElementById("form-item-attrs");
+    const previewMonsterAttrs = document.getElementById("preview-monster-attrs");
+    const previewItemAttrs = document.getElementById("preview-item-attrs");
+    const previewName = document.getElementById("preview-name");
+    const previewType = document.getElementById("preview-type");
+
+    if (inputName) inputName.addEventListener("input", (e) => previewName.textContent = e.target.value || "Nome da carta");
+
+    const updateTypePreview = () => {
+      if (radioMonster.checked) {
+        previewType.textContent = "Monstro";
+        formMonsterAttrs.classList.remove("hidden");
+        previewMonsterAttrs.classList.remove("hidden");
+        formItemAttrs.classList.add("hidden");
+        previewItemAttrs.classList.add("hidden");
+      } else {
+        previewType.textContent = "Item";
+        formItemAttrs.classList.remove("hidden");
+        previewItemAttrs.classList.remove("hidden");
+        formMonsterAttrs.classList.add("hidden");
+        previewMonsterAttrs.classList.add("hidden");
+      }
+    };
+
+    if (radioMonster && radioItem) {
+      radioMonster.addEventListener("change", updateTypePreview);
+      radioItem.addEventListener("change", updateTypePreview);
+      updateTypePreview(); // Executa na carga para ajustar a visualização de cartas existentes
+    }
+
+    const textAndNumberAttrs = ["health", "intelligence", "strength", "physical", "agility", "mental", "weight", "damage", "rarity", "active_bonus"];
+    textAndNumberAttrs.forEach(attr => {
+      const inputEl = document.getElementById(`input-${attr}`);
+      const previewEl = document.getElementById(`preview-val-${attr}`);
+      if (inputEl && previewEl) inputEl.addEventListener("input", (e) => previewEl.textContent = e.target.value || (["rarity", "active_bonus"].includes(attr) ? "-" : "0"));
+    });
+
+    const inputConsumable = document.getElementById("input-consumable");
+    const previewConsumable = document.getElementById("preview-val-consumable");
+    if (inputConsumable && previewConsumable) inputConsumable.addEventListener("change", (e) => previewConsumable.textContent = e.target.checked ? "Sim" : "Não");
+  })();
+</script>
