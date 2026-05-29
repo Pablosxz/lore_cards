@@ -1,0 +1,41 @@
+pt-BR:
+  activerecord:
+    models:
+      collection: "Coleção"
+    attributes:
+      collection:
+        name: "Nome"
+        artistic_style: "Estilo artístico"
+        user: "Mestre"
+
+  collections:
+    create:
+      created: "Coleção criada com sucesso."
+    update:
+      updated: "Coleção atualizada com sucesso."
+    destroy:
+      destroyed: "Coleção excluída com sucesso."
+    index:
+      title: "Coleções"
+      new: "Nova Coleção"
+      show: "Ver esta coleção"
+      empty: "Nenhuma coleção encontrada."
+    show:
+      title: "Detalhes da Coleção"
+      edit: "Editar esta coleção"
+      back: "Voltar às coleções"
+      destroy: "Excluir esta coleção"
+    new:
+      title: "Nova Coleção"
+      back: "Voltar às coleções"
+    edit:
+      title: "Editar Coleção"
+      show: "Ver esta coleção"
+      back: "Voltar às coleções"
+    collection:
+      name: "Nome"
+      artistic_style: "Estilo artístico"
+    form:
+      errors_header:
+        one: "1 erro impediu que esta coleção fosse salva:"
+        other: "%{count} erros impediram que esta coleção fosse salva:"

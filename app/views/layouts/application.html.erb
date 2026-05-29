@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="dark">
   <head>
     <title><%= content_for(:title) || "Lore Cards" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -30,9 +30,18 @@
       </div>
     <% end %>
 
-    <main class="min-h-screen">
-      <%= yield %>
-    </main>
+    <% if user_signed_in? %>
+      <div class="flex min-h-screen bg-[#070913]">
+        <%= render "shared/sidebar" %>
+        <main class="flex-1 p-8 overflow-y-auto">
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
+      <main class="min-h-screen">
+        <%= yield %>
+      </main>
+    <% end %>
 
     <!-- Modal Customizado do Turbo Confirm -->
     <div id="turbo-confirm-dialog" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center backdrop-blur-sm">

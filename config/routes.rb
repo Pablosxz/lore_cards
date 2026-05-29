@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :campaigns
+  resources :collections
   get "cards/index"
   get "cards/new"
   devise_for :users

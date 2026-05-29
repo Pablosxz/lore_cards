@@ -1,0 +1,21 @@
+pt-BR:
+  activerecord:
+    models:
+      card: "Carta"
+    attributes:
+      card:
+        name: "Nome"
+        category: "Tipo"
+        description: "Descrição"
+        health: "Vida"
+        intelligence: "Inteligência"
+        strength: "Força"
+        physical: "Físico"
+        agility: "Agilidade"
+        mental: "Mental"
+        weight: "Peso"
+        damage: "Dano"
+        rarity: "Raridade"
+        active_bonus: "Bônus ativo"
+        consumable: "Consumível"
+        collection: "Coleção"

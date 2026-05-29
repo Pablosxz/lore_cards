@@ -1,0 +1,41 @@
+pt-BR:
+  activerecord:
+    models:
+      campaign: "Campanha"
+    attributes:
+      campaign:
+        name: "Nome"
+        base_story: "História base"
+        user: "Mestre"
+
+  campaigns:
+    create:
+      created: "Campanha criada com sucesso."
+    update:
+      updated: "Campanha atualizada com sucesso."
+    destroy:
+      destroyed: "Campanha excluída com sucesso."
+    index:
+      title: "Campanhas"
+      new: "Nova Campanha"
+      show: "Ver esta campanha"
+      empty: "Nenhuma campanha encontrada."
+    show:
+      title: "Detalhes da Campanha"
+      edit: "Editar esta campanha"
+      back: "Voltar às campanhas"
+      destroy: "Excluir esta campanha"
+    new:
+      title: "Nova Campanha"
+      back: "Voltar às campanhas"
+    edit:
+      title: "Editar Campanha"
+      show: "Ver esta campanha"
+      back: "Voltar às campanhas"
+    campaign:
+      name: "Nome"
+      base_story: "História base"
+    form:
+      errors_header:
+        one: "1 erro impediu que esta campanha fosse salva:"
+        other: "%{count} erros impediram que esta campanha fosse salva:"

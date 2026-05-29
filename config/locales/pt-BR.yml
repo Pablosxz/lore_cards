@@ -5,16 +5,6 @@ pt-BR:
         one: "Não foi possível salvar: 1 erro encontrado."
         other: "Não foi possível salvar: %{count} erros encontrados."
 
-  activerecord:
-    models:
-      user: "usuário"
-    attributes:
-      user:
-        username: "Nome de usuário"
-        email: "E-mail"
-        password: "Senha"
-        password_confirmation: "Confirmação de senha"
-
   devise:
     sessions:
       signed_in: "Login realizado com sucesso."

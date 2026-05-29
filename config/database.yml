@@ -23,7 +23,11 @@ default: &default
 development:
   <<: *default
   database: lore_cards_development
-
+  username: postgres       # Seu usuário do PostgreSQL
+  password: 123      # Sua senha do PostgreSQL
+  host: localhost         # Como a porta foi exposta, o localhost funciona
+  port: 5432
+  
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
   # When left blank, PostgreSQL will use the default role. This is
@@ -81,5 +85,5 @@ test:
 production:
   <<: *default
   database: lore_cards_production
-  username: lore_cards
+  username: postgres
   password: <%= ENV["LORE_CARDS_DATABASE_PASSWORD"] %>

@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_28_222808) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_29_003924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "name"
+    t.text "base_story"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_campaigns_on_user_id"
+  end
+
+  create_table "campaigns_collections", id: false, force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "collection_id", null: false
+    t.index ["campaign_id", "collection_id"], name: "index_campaigns_collections_on_campaign_id_and_collection_id"
+    t.index ["collection_id", "campaign_id"], name: "index_campaigns_collections_on_collection_id_and_campaign_id"
+  end
 
   create_table "cards", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -32,7 +48,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_28_222808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
+    t.bigint "collection_id"
+    t.index ["collection_id"], name: "index_cards_on_collection_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.string "name"
+    t.string "artistic_style"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_collections_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,5 +76,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_28_222808) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "campaigns", "users"
+  add_foreign_key "cards", "collections"
   add_foreign_key "cards", "users"
+  add_foreign_key "collections", "users"
 end
