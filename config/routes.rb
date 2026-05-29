@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   post "ai/improve_text", to: "ai#improve_text", as: :ai_improve_text
 
-  resources :campaigns
+  resources :campaigns do
+    member do
+      post :add_collection
+      delete :remove_collection
+    end
+  end
   resources :collections do
     member do
       post :add_card

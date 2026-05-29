@@ -21,6 +21,10 @@ pt-BR:
       show: "Ver"
       edit: "Editar"
       empty: "Nenhuma campanha encontrada."
+      load: "Carregar Campanha"
+      confirm_delete: "Tem certeza que deseja excluir esta campanha?"
+      collection_singular: "Coleção"
+      collection_plural: "Coleções"
     show:
       title: "Detalhes da Campanha"
       edit: "Editar esta campanha"
@@ -29,10 +33,12 @@ pt-BR:
     new:
       title: "Nova Campanha"
       back: "Voltar"
+      submit: "Criar Campanha"
     edit:
       title: "Editar Campanha"
       show: "Ver esta campanha"
       back: "Voltar"
+      submit: "Salvar Alterações"
     campaign:
       name: "Nome"
       base_story: "História base"

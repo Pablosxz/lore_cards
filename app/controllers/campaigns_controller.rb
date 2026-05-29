@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: %i[ show edit update destroy ]
+  before_action :set_campaign, only: %i[ show edit update destroy add_collection remove_collection ]
 
   # GET /campaigns or /campaigns.json
   def index
@@ -13,6 +13,20 @@ class CampaignsController < ApplicationController
 
   # GET /campaigns/1 or /campaigns/1.json
   def show
+    @campaign_collections = @campaign.collections
+    @available_collections = current_user.collections.where.not(id: @campaign.collection_ids)
+  end
+
+  def add_collection
+    collection = current_user.collections.find(params[:collection_id])
+    @campaign.collections << collection unless @campaign.collections.include?(collection)
+    redirect_to @campaign, notice: "Coleção vinculada com sucesso."
+  end
+
+  def remove_collection
+    collection = current_user.collections.find(params[:collection_id])
+    @campaign.collections.delete(collection)
+    redirect_to @campaign, notice: "Coleção removida da campanha."
   end
 
   # GET /campaigns/new
@@ -30,7 +44,7 @@ class CampaignsController < ApplicationController
 
     respond_to do |format|
       if @campaign.save
-        format.html { redirect_to @campaign, notice: t(".created") }
+        format.html { redirect_to campaigns_path, notice: t(".created") }
         format.json { render :show, status: :created, location: @campaign }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -43,7 +57,7 @@ class CampaignsController < ApplicationController
   def update
     respond_to do |format|
       if @campaign.update(campaign_params)
-        format.html { redirect_to @campaign, notice: t(".updated"), status: :see_other }
+        format.html { redirect_to campaigns_path, notice: t(".updated"), status: :see_other }
         format.json { render :show, status: :ok, location: @campaign }
       else
         format.html { render :edit, status: :unprocessable_entity }

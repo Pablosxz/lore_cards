@@ -1,7 +1,3 @@
-<% content_for :title, t('.title') %>
-
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl text-white"><%= t('.title') %></h1>
-
-  <%= render "form", campaign: @campaign, back_path: campaigns_path, back_label: t('.back') %>
-</div>
+<turbo-frame id="campaign_modal">
+  <%= render "form_modal", campaign: @campaign, title: t('.title') %>
+</turbo-frame>
