@@ -14,7 +14,10 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email])
+    devise_parameter_sanitizer.permit(
+      :sign_up,
+      keys: [ :username, :email, :role ]
+    )
   end
 
   # Sobrescreve o destino padrão do Devise após o logout

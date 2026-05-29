@@ -1,8 +1,18 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: %i[ show edit update destroy add_collection remove_collection ]
 
-  # GET /campaigns or /campaigns.json
+  before_action :set_campaign,
+                only: %i[
+                  show
+                  edit
+                  update
+                  destroy
+                  add_collection
+                  remove_collection
+                  invite_player
+                  remove_player
+                ]
+
   def index
     if params[:query].present?
       @campaigns = current_user.campaigns.where("LOWER(name) LIKE ?", "%#{params[:query].downcase}%")
@@ -11,7 +21,6 @@ class CampaignsController < ApplicationController
     end
   end
 
-  # GET /campaigns/1 or /campaigns/1.json
   def show
     @campaign_collections = @campaign.collections
     @available_collections = current_user.collections.where.not(id: @campaign.collection_ids)
@@ -19,26 +28,51 @@ class CampaignsController < ApplicationController
 
   def add_collection
     collection = current_user.collections.find(params[:collection_id])
+
     @campaign.collections << collection unless @campaign.collections.include?(collection)
+
     redirect_to @campaign, notice: "Coleção vinculada com sucesso."
   end
 
   def remove_collection
     collection = current_user.collections.find(params[:collection_id])
+
     @campaign.collections.delete(collection)
+
     redirect_to @campaign, notice: "Coleção removida da campanha."
   end
 
-  # GET /campaigns/new
+  def invite_player
+    user = User.find_by(email: params[:email])
+
+    if user.nil?
+      redirect_to @campaign, alert: "Usuário não encontrado."
+      return
+    end
+
+    unless user.player?
+      redirect_to @campaign, alert: "Esse usuário não é um jogador."
+      return
+    end
+
+    if @campaign.players.include?(user)
+      redirect_to @campaign, alert: "Jogador já participa da campanha."
+      return
+    end
+
+    @campaign.players << user
+
+    redirect_to @campaign,
+                notice: "Jogador adicionado à campanha com sucesso."
+  end
+
   def new
     @campaign = current_user.campaigns.build
   end
 
-  # GET /campaigns/1/edit
   def edit
   end
 
-  # POST /campaigns or /campaigns.json
   def create
     @campaign = current_user.campaigns.build(campaign_params)
 
@@ -53,7 +87,6 @@ class CampaignsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /campaigns/1 or /campaigns/1.json
   def update
     respond_to do |format|
       if @campaign.update(campaign_params)
@@ -66,7 +99,6 @@ class CampaignsController < ApplicationController
     end
   end
 
-  # DELETE /campaigns/1 or /campaigns/1.json
   def destroy
     @campaign.destroy!
 
@@ -76,14 +108,22 @@ class CampaignsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_campaign
-      @campaign = current_user.campaigns.find(params[:id])
-    end
+  def remove_player
+    player = User.find(params[:player_id])
 
-    # Only allow a list of trusted parameters through.
-    def campaign_params
-      params.require(:campaign).permit(:name, :base_story)
-    end
+    @campaign.players.delete(player)
+
+    redirect_to @campaign,
+                notice: "Jogador removido da campanha."
+  end
+
+  private
+
+  def set_campaign
+    @campaign = current_user.campaigns.find(params[:id])
+  end
+
+  def campaign_params
+    params.require(:campaign).permit(:name, :base_story)
+  end
 end

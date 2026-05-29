@@ -24,8 +24,8 @@ development:
   <<: *default
   database: lore_cards_development
   username: postgres       # Seu usuário do PostgreSQL
-  password: 123      # Sua senha do PostgreSQL
-  host: localhost         # Como a porta foi exposta, o localhost funciona
+  password: root      # Sua senha do PostgreSQL
+  host: 127.0.0.1        # Como a porta foi exposta, o localhost funciona
   port: 5432
   
   # The specified database role being used to connect to PostgreSQL.

@@ -2,57 +2,84 @@
 
 <% if notice.present? %>
   <div class="mb-6">
-    <p class="py-2 px-4 bg-green-950/60 border border-green-500/40 text-green-400 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-4 bg-green-950/60 border border-green-500/40 text-green-400 font-medium rounded-md inline-block" id="notice">
+      <%= notice %>
+    </p>
   </div>
 <% end %>
 
 <%# Header: voltar %>
 <div class="mb-6 flex items-center gap-3">
-  <%= link_to campaigns_path, class: "text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm" do %>
+  <%= link_to campaigns_path,
+      class: "text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm" do %>
+
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
     </svg>
+
     Detalhes da Campanha
   <% end %>
 </div>
 
 <%# Card principal da campanha %>
 <div class="bg-[#0d1129] border border-[#1e2646] rounded-xl p-6 mb-8 flex items-start gap-6">
+
   <%# Imagem circular %>
   <div class="flex-shrink-0 w-24 h-24 rounded-full overflow-hidden border-2 border-violet-500/40 bg-[#11162d]">
     <div class="w-full h-full bg-cover bg-center opacity-80"
-         style="background-image: url('<%= asset_path('image-cadastro.png') %>')"></div>
+         style="background-image: url('<%= asset_path('image-cadastro.png') %>')">
+    </div>
   </div>
 
   <%# Info da campanha %>
   <div class="flex-1 min-w-0">
-    <h1 class="text-2xl font-bold text-white mb-2"><%= @campaign.name %></h1>
-    <p class="text-slate-300 text-sm leading-relaxed line-clamp-3"><%= @campaign.base_story %></p>
+    <h1 class="text-2xl font-bold text-white mb-2">
+      <%= @campaign.name %>
+    </h1>
+
+    <p class="text-slate-300 text-sm leading-relaxed line-clamp-3">
+      <%= @campaign.base_story %>
+    </p>
   </div>
 
   <%# Ações %>
   <div class="flex-shrink-0 flex items-center gap-2">
-    <%= link_to edit_campaign_path(@campaign), data: { turbo_frame: "campaign_modal" },
+
+    <%= link_to edit_campaign_path(@campaign),
+        data: { turbo_frame: "campaign_modal" },
         class: "inline-flex items-center gap-1.5 rounded-md px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-100 text-sm font-medium transition-colors" do %>
+
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
       </svg>
+
       Editar
     <% end %>
-    <%= button_to campaign_path(@campaign), method: :delete,
+
+    <%= button_to campaign_path(@campaign),
+        method: :delete,
         data: { turbo_confirm: "Tem certeza que deseja excluir esta campanha?" },
         class: "inline-flex items-center justify-center rounded-md px-2.5 py-2 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white text-sm font-medium transition-colors cursor-pointer" do %>
+
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"/>
       </svg>
+
     <% end %>
+
   </div>
 </div>
 
 <%# Seção: Coleções Vinculadas %>
 <div class="bg-[#0d1129] border border-[#1e2646] rounded-xl p-6">
+
   <div class="flex items-center justify-between mb-6">
-    <h2 class="text-lg font-semibold text-white">Coleções Vinculadas</h2>
+    <h2 class="text-lg font-semibold text-white">
+      Coleções Vinculadas
+    </h2>
+
     <% if @available_collections.any? %>
       <label for="toggle-add-collection"
              class="inline-flex items-center gap-2 rounded-md bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 text-sm font-semibold transition-colors cursor-pointer">
@@ -61,66 +88,233 @@
     <% end %>
   </div>
 
-  <%# Painel de adicionar coleção (toggle) %>
+  <%# Painel adicionar coleção %>
   <% if @available_collections.any? %>
+
     <input type="checkbox" id="toggle-add-collection" class="hidden peer/addcol">
+
     <div class="hidden peer-checked/addcol:block mb-8 bg-[#0a0d1a] border border-[#1e2646] rounded-xl p-5">
-      <h3 class="text-base font-semibold text-white mb-4">Vincular Coleção Existente</h3>
+
+      <h3 class="text-base font-semibold text-white mb-4">
+        Vincular Coleção Existente
+      </h3>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+
         <% @available_collections.each do |collection| %>
+
           <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-lg px-4 py-3 gap-3">
+
             <div class="min-w-0">
-              <p class="text-white text-sm font-medium truncate"><%= collection.name %></p>
-              <p class="text-slate-500 text-xs"><%= collection.cards.count %> cartas</p>
+              <p class="text-white text-sm font-medium truncate">
+                <%= collection.name %>
+              </p>
+
+              <p class="text-slate-500 text-xs">
+                <%= collection.cards.count %> cartas
+              </p>
             </div>
-            <%= button_to add_collection_campaign_path(@campaign), method: :post,
+
+            <%= button_to add_collection_campaign_path(@campaign),
+                method: :post,
                 params: { collection_id: collection.id },
                 class: "flex-shrink-0 p-1.5 bg-violet-600/20 text-violet-400 hover:bg-violet-600 hover:text-white rounded-md transition-colors cursor-pointer" do %>
+
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 4v16m8-8H4"/>
               </svg>
+
             <% end %>
+
           </div>
+
         <% end %>
+
       </div>
+
     </div>
+
   <% end %>
 
-  <%# Grid de coleções vinculadas %>
+  <%# Grid coleções vinculadas %>
   <% if @campaign_collections.any? %>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
       <% @campaign_collections.each do |collection| %>
+
         <div class="relative flex items-center gap-4 bg-[#0a0d1a] border border-[#1e2646] rounded-xl p-4 hover:border-violet-500/40 transition-colors">
-          <%# Thumbnail %>
+
           <div class="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden bg-[#11162d] border border-[#1e2646]">
             <div class="w-full h-full bg-cover bg-center opacity-70"
-                 style="background-image: url('<%= asset_path('image-cadastro.png') %>')"></div>
+                 style="background-image: url('<%= asset_path('image-cadastro.png') %>')">
+            </div>
           </div>
-          <%# Info %>
+
           <div class="flex-1 min-w-0">
+
             <%= link_to collection_path(collection), class: "block" do %>
-              <p class="text-white font-semibold text-sm truncate hover:text-violet-400 transition-colors"><%= collection.name %></p>
+              <p class="text-white font-semibold text-sm truncate hover:text-violet-400 transition-colors">
+                <%= collection.name %>
+              </p>
             <% end %>
-            <p class="text-slate-400 text-xs mt-0.5"><%= collection.cards.count %> <%= collection.cards.count == 1 ? "Carta" : "Cartas" %></p>
+
+            <p class="text-slate-400 text-xs mt-0.5">
+              <%= collection.cards.count %>
+              <%= collection.cards.count == 1 ? "Carta" : "Cartas" %>
+            </p>
+
           </div>
-          <%# Remover %>
-          <%= button_to remove_collection_campaign_path(@campaign), method: :delete,
+
+          <%= button_to remove_collection_campaign_path(@campaign),
+              method: :delete,
               params: { collection_id: collection.id },
               data: { turbo_confirm: "Remover esta coleção da campanha?" },
               class: "absolute top-2 right-2 p-1 text-red-500/60 hover:text-red-500 transition-colors cursor-pointer bg-transparent border-none" do %>
+
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"/>
             </svg>
+
           <% end %>
+
         </div>
+
       <% end %>
+
     </div>
+
   <% else %>
+
     <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-12 text-center">
-      <p class="text-slate-400 text-sm">Nenhuma coleção vinculada a esta campanha ainda.</p>
+      <p class="text-slate-400 text-sm">
+        Nenhuma coleção vinculada a esta campanha ainda.
+      </p>
     </div>
+
   <% end %>
 </div>
 
-<turbo-frame id="campaign_modal"></turbo-frame>
+<%# Jogadores %>
+<div class="bg-[#0d1129] border border-[#1e2646] rounded-xl p-6 mt-8">
 
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-lg font-semibold text-white">
+        Jogadores da Campanha
+      </h2>
+
+      <p class="text-sm text-slate-400 mt-1">
+        Convide jogadores para participarem da aventura.
+      </p>
+    </div>
+  </div>
+
+  <%# Form convite %>
+  <div class="bg-[#0a0d1a] border border-[#1e2646] rounded-xl p-5 mb-8">
+
+    <%= form_with url: invite_player_campaign_path(@campaign),
+        method: :post,
+        class: "space-y-4" do %>
+
+      <div>
+
+        <label class="block text-sm font-medium text-slate-300 mb-2">
+          E-mail do jogador
+        </label>
+
+        <div class="flex gap-3">
+
+          <%= email_field_tag :email,
+              nil,
+              placeholder: "jogador@email.com",
+              required: true,
+              class: "flex-1 bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500" %>
+
+          <%= button_tag type: "submit",
+              class: "inline-flex items-center justify-center rounded-md bg-violet-600 hover:bg-violet-700 text-white px-5 py-2 text-sm font-semibold transition-colors cursor-pointer" do %>
+
+            Convidar
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <%# Lista jogadores %>
+  <% if @campaign.players.any? %>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+      <% @campaign.players.each do |player| %>
+
+        <div class="relative flex items-center gap-4 bg-[#0a0d1a] border border-[#1e2646] rounded-xl p-4 hover:border-violet-500/40 transition-colors">
+
+          <%# Avatar %>
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-300 font-bold">
+            <%= player.username.first.upcase %>
+          </div>
+
+          <%# Infos %>
+          <div class="flex-1 min-w-0">
+
+            <p class="text-white font-semibold text-sm truncate">
+              <%= player.username %>
+            </p>
+
+            <p class="text-slate-400 text-xs truncate">
+              <%= player.email %>
+            </p>
+
+          </div>
+
+          <%# Ações jogador %>
+          <div class="flex items-center gap-2">
+
+            <span class="bg-emerald-500/20 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-500/20">
+              Jogador
+            </span>
+
+            <%= button_to remove_player_campaign_path(@campaign),
+                method: :delete,
+                params: { player_id: player.id },
+                data: { turbo_confirm: "Remover este jogador da campanha?" },
+                class: "p-1 text-red-500/60 hover:text-red-500 transition-colors cursor-pointer bg-transparent border-none" do %>
+
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+
+            <% end %>
+
+          </div>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  <% else %>
+
+    <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-12 text-center">
+
+      <p class="text-slate-400 text-sm">
+        Nenhum jogador foi adicionado a esta campanha ainda.
+      </p>
+
+    </div>
+
+  <% end %>
+
+</div>
+
+<turbo-frame id="campaign_modal"></turbo-frame>
