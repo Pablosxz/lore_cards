@@ -56,6 +56,123 @@
                              class: "bg-[#1a2035] border-[#2a3354] text-white placeholder:text-slate-500 focus-visible:ring-violet-500" %>
           </div>
 
+          <div class="space-y-4 pt-4 pb-6">
+
+            <div class="space-y-1">
+              <h3 class="text-slate-200 text-sm font-semibold">
+                Escolha seu destino
+              </h3>
+
+              <p class="text-xs text-slate-500">
+                Defina como deseja explorar o universo Lore Cards.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+
+              <%# Jogador %>
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  name="user[role]"
+                  value="player"
+                  class="hidden role-option"
+                  checked
+                >
+
+                <div class="role-card selected-role rounded-xl border border-violet-500 bg-violet-600/20 p-4 transition-all duration-200">
+
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="h-10 w-10 rounded-lg bg-violet-500/20 flex items-center justify-center text-lg">
+                      🎮
+                    </div>
+
+                  </div>
+
+                  <h4 class="text-white font-semibold text-sm">
+                    Jogador
+                  </h4>
+
+                  <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Colecione cartas e participe das campanhas.
+                  </p>
+                </div>
+              </label>
+
+              <%# Mestre %>
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  name="user[role]"
+                  value="master"
+                  class="hidden role-option"
+                >
+
+                <div class="role-card rounded-xl border border-[#2a3354] bg-[#1a2035] p-4 transition-all duration-200 hover:border-violet-500 hover:bg-[#202847]">
+
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="h-10 w-10 rounded-lg bg-violet-500/20 flex items-center justify-center text-lg">
+                      🧙
+                    </div>
+
+                  </div>
+
+                  <h4 class="text-white font-semibold text-sm">
+                    Mestre
+                  </h4>
+
+                  <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Crie campanhas, inimigos e aventuras épicas.
+                  </p>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const options = document.querySelectorAll(".role-option")
+
+    options.forEach((option) => {
+      option.addEventListener("change", () => {
+
+        document.querySelectorAll(".role-card").forEach((card) => {
+          card.classList.remove(
+            "selected-role",
+            "border-violet-500",
+            "bg-violet-600/20",
+            "ring-2",
+            "ring-violet-500"
+          )
+
+          card.classList.add(
+            "border-[#2a3354]",
+            "bg-[#1a2035]"
+          )
+        })
+
+        document.querySelectorAll(".selected-badge").forEach((badge) => {
+          badge.classList.add("hidden")
+        })
+
+        const selectedCard = option.nextElementSibling
+        const selectedBadge = selectedCard.querySelector(".selected-badge")
+
+        selectedCard.classList.add(
+          "selected-role",
+          "border-violet-500",
+          "bg-violet-600/20",
+          "ring-2",
+          "ring-violet-500"
+        )
+
+        selectedBadge.classList.remove("hidden")
+      })
+    })
+  })
+</script>
+          
           <%= button_tag type: "submit",
                 class: "w-full mt-2 inline-flex items-center justify-center rounded-md bg-violet-600 hover:bg-violet-700 text-white h-10 px-4 py-2 text-sm font-semibold transition-colors cursor-pointer" do %>
             Cadastrar-se

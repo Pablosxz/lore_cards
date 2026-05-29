@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   resources :campaigns do
     member do
       post :add_collection
+      post :invite_player
+
       delete :remove_collection
+      delete :remove_player
     end
   end
   resources :collections do
