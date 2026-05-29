@@ -2,16 +2,16 @@
 
 <div class="md:w-2/3 w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-green-950/60 border border-green-500/40 mb-5 text-green-400 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl"><%= t('.title') %></h1>
+  <h1 class="font-bold text-4xl text-white"><%= t('.title') %></h1>
 
   <%= render @campaign %>
 
-  <%= link_to t('.edit'), edit_campaign_path(@campaign), class: "mt-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to t('.back'), campaigns_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to t('.back'), campaigns_path, class: "mt-2 rounded-md px-3.5 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-100 inline-block font-medium transition-colors" %>
+  <%= link_to t('.edit'), edit_campaign_path(@campaign), class: "ml-2 rounded-md px-3.5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white inline-block font-semibold transition-colors" %>
   <div class="inline-block ml-2">
-    <%= button_to t('.destroy'), @campaign, method: :delete, class: "mt-2 rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium" %>
+    <%= button_to t('.destroy'), @campaign, method: :delete, class: "mt-2 rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-700 font-medium transition-colors" %>
   </div>
 </div>

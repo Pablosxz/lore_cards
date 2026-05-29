@@ -1,25 +1,74 @@
 <% content_for :title, t('.title') %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+<div class="mb-8 flex items-center gap-4">
+  <%= form_with url: collections_path, method: :get, class: "relative w-full max-w-lg" do |f| %>
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    </span>
+    <%= f.text_field :query, value: params[:query], placeholder: "Buscar...", oninput: "this.form.requestSubmit()", class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md pl-10 pr-4 py-1.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500" %>
   <% end %>
-
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl"><%= t('.title') %></h1>
-    <%= link_to t('.new'), new_collection_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
-  </div>
-
-  <div id="collections" class="min-w-full">
-    <% if @collections.any? %>
-      <% @collections.each do |collection| %>
-        <%= render collection %>
-        <p>
-          <%= link_to t('.show'), collection, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-        </p>
-      <% end %>
-    <% else %>
-      <p class="text-center my-10"><%= t('.empty') %></p>
-    <% end %>
-  </div>
+  <%= link_to t('.new'), new_collection_path, data: { turbo_frame: "collection_modal" }, class: "inline-flex items-center justify-center rounded-md bg-violet-600 hover:bg-violet-700 text-white h-10 px-4 py-2 text-sm font-semibold transition-colors shadow-lg shadow-violet-600/10 whitespace-nowrap" %>
 </div>
+
+<div class="flex items-center justify-between mb-8">
+  <h1 class="text-3xl font-bold text-white tracking-tight"><%= t('.title') %></h1>
+</div>
+
+<div id="collections">
+  <% if @collections.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <% @collections.each do |collection| %>
+        <% card_count = collection.cards.count %>
+        <div class="group relative">
+          <%# Ações hover — z-20, ficam acima do link %>
+          <div class="absolute top-3 left-3 z-20 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-auto">
+            <%= link_to edit_collection_path(collection), data: { turbo_frame: "collection_modal" },
+                class: "p-1.5 bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-md transition-colors" do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+              </svg>
+            <% end %>
+            <%= button_to collection_path(collection), method: :delete,
+                data: { turbo_confirm: "Tem certeza que deseja excluir esta coleção?" },
+                class: "p-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-md transition-colors cursor-pointer" do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            <% end %>
+          </div>
+
+          <%# Card clicável %>
+          <%= link_to collection_path(collection), class: "block" do %>
+            <div class="relative h-48 rounded-xl overflow-hidden shadow-xl bg-[#060810] transition-transform duration-200 group-hover:scale-[1.02]"
+                 style="border-left: 4px solid #7c3aed;">
+              <div class="absolute inset-0 bg-cover bg-center opacity-60"
+                   style="background-image: url('<%= asset_path('image-cadastro.png') %>')"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
+              <div class="absolute top-3 right-3 z-10">
+                <span class="bg-violet-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                  <%= card_count %> <%= card_count == 1 ? 'card' : 'cards' %>
+                </span>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8 z-10">
+                <h3 class="text-white font-bold text-xl leading-tight line-clamp-1">
+                  <%= collection.name %>
+                </h3>
+                <% if collection.artistic_style.present? %>
+                  <p class="text-slate-300 text-sm mt-1 line-clamp-2 leading-snug">
+                    <%= collection.artistic_style %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-12 text-center">
+      <p class="text-slate-400 text-sm"><%= t('.empty') %></p>
+    </div>
+  <% end %>
+</div>
+
+<turbo-frame id="collection_modal"></turbo-frame>

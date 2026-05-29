@@ -18,20 +18,22 @@ pt-BR:
     index:
       title: "Coleções"
       new: "Nova Coleção"
-      show: "Ver esta coleção"
+      show: "Ver"
+      edit: "Editar"
       empty: "Nenhuma coleção encontrada."
+      artistic_style_label: "Estilo artístico"
     show:
       title: "Detalhes da Coleção"
       edit: "Editar esta coleção"
-      back: "Voltar às coleções"
-      destroy: "Excluir esta coleção"
+      back: "Voltar"
+      destroy: "Excluir"
     new:
       title: "Nova Coleção"
-      back: "Voltar às coleções"
+      back: "Voltar"
     edit:
       title: "Editar Coleção"
       show: "Ver esta coleção"
-      back: "Voltar às coleções"
+      back: "Voltar"
     collection:
       name: "Nome"
       artistic_style: "Estilo artístico"

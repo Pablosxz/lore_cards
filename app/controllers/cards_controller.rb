@@ -8,19 +8,27 @@ class CardsController < ApplicationController
     else
       @cards = current_user.cards
     end
-    
+
     @card = Card.new(category: :monster)
   end
 
   def new
-    @card = current_user.cards.build(category: :monster)
+    @card = current_user.cards.build(category: :monster, collection_id: params[:collection_id])
   end
 
   def create
     @card = current_user.cards.build(card_params)
+    # Garante que a coleção pertence ao usuário atual
+    if @card.collection_id.present?
+      @card.collection = current_user.collections.find_by(id: @card.collection_id)
+    end
 
     if @card.save
-      redirect_to cards_path, notice: "Carta criada com sucesso!"
+      if @card.collection_id.present?
+        redirect_to collection_path(@card.collection_id), notice: "Carta criada com sucesso!"
+      else
+        redirect_to cards_path, notice: "Carta criada com sucesso!"
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -45,7 +53,7 @@ class CardsController < ApplicationController
   def destroy
     # Busca a carta específica do Mestre
     @card = current_user.cards.find(params[:id])
-    
+
     # Deleta do banco de dados
     @card.destroy
 
@@ -58,9 +66,9 @@ class CardsController < ApplicationController
   # Strong parameters: permite apenas os dados seguros que foram definidos no banco
   def card_params
     params.require(:card).permit(
-      :name, :category, :health, :intelligence, :strength, 
-      :physical, :agility, :mental, :weight, :damage, 
-      :rarity, :active_bonus, :consumable, :description
+      :name, :category, :health, :intelligence, :strength,
+      :physical, :agility, :mental, :weight, :damage,
+      :rarity, :active_bonus, :consumable, :description, :collection_id
     )
   end
 end

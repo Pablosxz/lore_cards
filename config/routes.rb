@@ -1,12 +1,19 @@
 Rails.application.routes.draw do
+  post "ai/improve_text", to: "ai#improve_text", as: :ai_improve_text
+
   resources :campaigns
-  resources :collections
+  resources :collections do
+    member do
+      post :add_card
+      delete :remove_card
+    end
+  end
   get "cards/index"
   get "cards/new"
   devise_for :users
 
   resources :cards
-  
+
   root "dashboard#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

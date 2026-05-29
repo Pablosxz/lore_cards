@@ -18,20 +18,21 @@ pt-BR:
     index:
       title: "Campanhas"
       new: "Nova Campanha"
-      show: "Ver esta campanha"
+      show: "Ver"
+      edit: "Editar"
       empty: "Nenhuma campanha encontrada."
     show:
       title: "Detalhes da Campanha"
       edit: "Editar esta campanha"
-      back: "Voltar às campanhas"
-      destroy: "Excluir esta campanha"
+      back: "Voltar"
+      destroy: "Excluir"
     new:
       title: "Nova Campanha"
-      back: "Voltar às campanhas"
+      back: "Voltar"
     edit:
       title: "Editar Campanha"
       show: "Ver esta campanha"
-      back: "Voltar às campanhas"
+      back: "Voltar"
     campaign:
       name: "Nome"
       base_story: "História base"

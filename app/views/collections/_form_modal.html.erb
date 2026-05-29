@@ -1,0 +1,102 @@
+<div id="collection-modal-backdrop"
+     class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm"
+     data-controller="collection-preview ai-improve"
+     data-ai-improve-url-value="<%= ai_improve_text_path %>"
+     data-ai-improve-mode-value="fix">
+  <div class="bg-[#0b0f19] border border-violet-500/30 rounded-xl w-full max-w-lg mx-4 p-10 relative flex flex-col max-h-[90vh] overflow-y-auto"
+       style="box-shadow: 0 0 0 1px rgba(124,58,237,0.2), 0 0 60px rgba(124,58,237,0.15);">
+
+    <%# Botão de fechar %>
+    <button onclick="document.getElementById('collection_modal').innerHTML = ''"
+            class="absolute top-4 right-4 text-slate-400 hover:text-white cursor-pointer transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <h2 class="text-2xl font-bold text-white mb-6"><%= title %></h2>
+
+    <%= form_with model: collection, local: true do |f| %>
+      <% if collection.errors.any? %>
+        <div class="bg-red-950/50 border border-red-800 text-red-200 p-4 rounded-md text-sm space-y-1 mb-5">
+          <p class="font-semibold"><%= t('collections.form.errors_header', count: collection.errors.count) %></p>
+          <ul class="list-disc pl-5 space-y-1">
+            <% collection.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%# Campo Nome %>
+      <div class="mb-8">
+        <%= f.label :name, "Nome da coleção", class: "block text-sm font-medium text-white mb-2" %>
+        <%= f.text_field :name,
+            placeholder: "Nome da coleção",
+            data: { action: "input->collection-preview#updateName" },
+            class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors" %>
+      </div>
+
+      <%# Campo Descrição %>
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-2">
+          <%= f.label :artistic_style, "Descrição da coleção", class: "text-sm font-medium text-white" %>
+          <button type="button"
+                  data-ai-improve-target="button"
+                  data-action="click->ai-improve#improve"
+                  class="inline-flex items-center gap-1.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs px-3 py-1.5 rounded-md transition-colors font-medium">
+            <svg data-ai-improve-target="spinner" class="hidden w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+            </svg>
+            <span data-label>Melhorar com IA</span>
+          </button>
+        </div>
+        <%= f.text_area :artistic_style,
+            rows: 3,
+            placeholder: "Descrição da coleção",
+            data: { action: "input->collection-preview#updateDescription", ai_improve_target: "textarea" },
+            class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors resize-none" %>
+        <p data-ai-improve-target="error" class="hidden text-red-400 text-xs mt-1"></p>
+      </div>
+
+      <%# Botão IA imagem (placeholder) %>
+      <div class="mb-8">
+        <button type="button" class="bg-violet-600 hover:bg-violet-700 text-white text-sm px-4 py-2 rounded-md transition-colors font-medium">
+          Gerar imagem com IA
+        </button>
+      </div>
+
+      <%# Preview do card %>
+      <div class="mb-8">
+        <div class="relative h-36 rounded-xl overflow-hidden shadow-lg bg-[#060810]"
+             style="border-left: 4px solid #7c3aed;">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#0f162e] via-[#111827] to-[#070913]"></div>
+          <div class="absolute top-3 right-3 z-10">
+            <span class="bg-violet-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+              <% if collection.persisted? %>
+                <%= collection.cards.count %> cards
+              <% else %>
+                X cards
+              <% end %>
+            </span>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-6 z-10 bg-gradient-to-t from-black/80 to-transparent">
+            <h3 data-collection-preview-target="namePreview"
+                class="text-white font-bold text-base leading-tight truncate">
+              <%= collection.name.presence || "Nome da coleção" %>
+            </h3>
+            <p data-collection-preview-target="descriptionPreview"
+               class="text-slate-300 text-sm mt-0.5 line-clamp-1 opacity-80">
+              <%= collection.artistic_style.presence || "Descrição da coleção" %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <%# Botão de submit %>
+      <%= f.submit collection.new_record? ? "Criar" : "Atualizar",
+          class: "w-full bg-violet-600 hover:bg-violet-700 text-white py-3 rounded-md font-semibold cursor-pointer transition-colors" %>
+    <% end %>
+  </div>
+</div>

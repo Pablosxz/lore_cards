@@ -1,25 +1,38 @@
 <% content_for :title, t('.title') %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+<div class="mb-8 flex items-center gap-4">
+  <%= form_with url: campaigns_path, method: :get, class: "relative w-full max-w-lg" do |f| %>
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    </span>
+    <%= f.text_field :query, value: params[:query], placeholder: "Buscar...", oninput: "this.form.requestSubmit()", class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md pl-10 pr-4 py-1.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500" %>
   <% end %>
+  <%= link_to t('.new'), new_campaign_path, class: "inline-flex items-center justify-center rounded-md bg-violet-600 hover:bg-violet-700 text-white h-10 px-4 py-2 text-sm font-semibold transition-colors shadow-lg shadow-violet-600/10 whitespace-nowrap" %>
+</div>
 
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl"><%= t('.title') %></h1>
-    <%= link_to t('.new'), new_campaign_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
-  </div>
+<div class="flex items-center justify-between mb-8">
+  <h1 class="text-3xl font-bold text-white tracking-tight"><%= t('.title') %></h1>
+</div>
 
-  <div id="campaigns" class="min-w-full">
-    <% if @campaigns.any? %>
+<div id="campaigns">
+  <% if @campaigns.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @campaigns.each do |campaign| %>
-        <%= render campaign %>
-        <p>
-          <%= link_to t('.show'), campaign, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-        </p>
+        <div class="bg-[#0a0d1a] border-2 border-[#1e2646] rounded-xl p-5 flex flex-col gap-3 hover:border-violet-500/50 transition-colors">
+          <h3 class="text-white font-bold text-lg truncate" title="<%= campaign.name %>"><%= campaign.name %></h3>
+          <p class="text-slate-400 text-xs line-clamp-3 leading-relaxed">
+            <%= campaign.base_story.presence || "-" %>
+          </p>
+          <div class="flex gap-2 mt-auto pt-2 border-t border-[#1e2646]">
+            <%= link_to t('.show'), campaign, class: "flex-1 text-center rounded-md py-1.5 text-xs font-medium bg-[#1e2548] text-white hover:bg-violet-600 transition-colors" %>
+            <%= link_to t('.edit'), edit_campaign_path(campaign), class: "flex-1 text-center rounded-md py-1.5 text-xs font-medium bg-[#1e2548] text-slate-300 hover:bg-[#2a3354] transition-colors" %>
+          </div>
+        </div>
       <% end %>
-    <% else %>
-      <p class="text-center my-10"><%= t('.empty') %></p>
-    <% end %>
-  </div>
+    </div>
+  <% else %>
+    <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-12 text-center">
+      <p class="text-slate-400 text-sm"><%= t('.empty') %></p>
+    </div>
+  <% end %>
 </div>

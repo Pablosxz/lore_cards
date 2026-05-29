@@ -1,14 +1,20 @@
 class CollectionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_collection, only: %i[ show edit update destroy ]
+  before_action :set_collection, only: %i[ show edit update destroy add_card remove_card ]
 
   # GET /collections or /collections.json
   def index
-    @collections = current_user.collections
+    if params[:query].present?
+      @collections = current_user.collections.where("LOWER(name) LIKE ?", "%#{params[:query].downcase}%")
+    else
+      @collections = current_user.collections
+    end
   end
 
-  # GET /collections/1 or /collections/1.json
+  # GET /collections/1
   def show
+    @cards_in_collection = @collection.cards.includes(:user)
+    @available_cards = current_user.cards.where.not(id: @cards_in_collection.select(:id))
   end
 
   # GET /collections/new
@@ -26,7 +32,7 @@ class CollectionsController < ApplicationController
 
     respond_to do |format|
       if @collection.save
-        format.html { redirect_to @collection, notice: t(".created") }
+        format.html { redirect_to collection_path(@collection), notice: t(".created") }
         format.json { render :show, status: :created, location: @collection }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +45,7 @@ class CollectionsController < ApplicationController
   def update
     respond_to do |format|
       if @collection.update(collection_params)
-        format.html { redirect_to @collection, notice: t(".updated"), status: :see_other }
+        format.html { redirect_to collection_path(@collection), notice: t(".updated"), status: :see_other }
         format.json { render :show, status: :ok, location: @collection }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -56,6 +62,18 @@ class CollectionsController < ApplicationController
       format.html { redirect_to collections_path, notice: t(".destroyed"), status: :see_other }
       format.json { head :no_content }
     end
+  end
+
+  def add_card
+    card = current_user.cards.find(params[:card_id])
+    card.update!(collection: @collection)
+    redirect_to collection_path(@collection), notice: "Carta adicionada à coleção."
+  end
+
+  def remove_card
+    card = current_user.cards.find(params[:card_id])
+    card.update!(collection: nil)
+    redirect_to collection_path(@collection), notice: "Carta removida da coleção."
   end
 
   private

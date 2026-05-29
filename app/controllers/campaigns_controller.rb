@@ -4,7 +4,11 @@ class CampaignsController < ApplicationController
 
   # GET /campaigns or /campaigns.json
   def index
-    @campaigns = current_user.campaigns
+    if params[:query].present?
+      @campaigns = current_user.campaigns.where("LOWER(name) LIKE ?", "%#{params[:query].downcase}%")
+    else
+      @campaigns = current_user.campaigns
+    end
   end
 
   # GET /campaigns/1 or /campaigns/1.json

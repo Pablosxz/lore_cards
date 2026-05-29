@@ -1,6 +1,6 @@
 <%= form_with(model: collection, class: "contents") do |form| %>
   <% if collection.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+    <div id="error_explanation" class="bg-red-950/60 border border-red-500/40 text-red-400 px-3 py-2 font-medium rounded-md mt-3">
       <h2><%= t('.errors_header', count: collection.errors.count) %></h2>
 
       <ul class="list-disc ml-6">
@@ -12,16 +12,19 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": collection.errors[:name].none?, "border-red-400 focus:outline-red-600": collection.errors[:name].any?}] %>
+    <%= form.label :name, class: "block text-sm font-medium text-white" %>
+    <%= form.text_field :name, class: ["block bg-[#11162d] text-white placeholder-slate-500 rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-[#1e2646] focus:border-violet-500 focus:outline-none": collection.errors[:name].none?, "border-red-500 focus:border-red-500 focus:outline-none": collection.errors[:name].any?}] %>
   </div>
 
   <div class="my-5">
-    <%= form.label :artistic_style %>
-    <%= form.text_field :artistic_style, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": collection.errors[:artistic_style].none?, "border-red-400 focus:outline-red-600": collection.errors[:artistic_style].any?}] %>
+    <%= form.label :artistic_style, class: "block text-sm font-medium text-white" %>
+    <%= form.text_field :artistic_style, class: ["block bg-[#11162d] text-white placeholder-slate-500 rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-[#1e2646] focus:border-violet-500 focus:outline-none": collection.errors[:artistic_style].none?, "border-red-500 focus:border-red-500 focus:outline-none": collection.errors[:artistic_style].any?}] %>
   </div>
 
-  <div class="inline">
-    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <div class="flex items-center gap-3 mt-2">
+    <% if local_assigns[:back_path] %>
+      <%= link_to local_assigns[:back_label].presence || t('back'), local_assigns[:back_path], class: "rounded-md px-3.5 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-100 inline-block font-medium transition-colors" %>
+    <% end %>
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white inline-block font-semibold cursor-pointer transition-colors" %>
   </div>
 <% end %>
