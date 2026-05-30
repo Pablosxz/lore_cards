@@ -1,5 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_master!
 
   before_action :set_campaign,
                 only: %i[

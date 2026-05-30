@@ -5,33 +5,49 @@
       <span class="text-white font-bold text-2xl tracking-wide">Lore Card</span>
     </div>
 
-    <nav class="space-y-1">
-      <%# Cartas — ícone de cartas de baralho %>
-      <%= link_to cards_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'cards' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
-        <svg class="w-5 h-5 <%= controller_name == 'cards' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6M9 15h4" />
-        </svg>
-        <span>Cartas</span>
-      <% end %>
+      <nav class="space-y-1">
 
-      <%# Coleções — ícone de livros/prateleira %>
-      <%= link_to collections_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'collections' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
-        <svg class="w-5 h-5 <%= controller_name == 'collections' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v10M12 5v14M16 8v9" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 21h14" />
-        </svg>
-        <span>Coleções</span>
-      <% end %>
+        <% if current_user.master? %>
 
-      <%# Campanhas — ícone de escudo/aventura %>
-      <%= link_to campaigns_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'campaigns' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
-        <svg class="w-5 h-5 <%= controller_name == 'campaigns' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-        <span>Campanhas</span>
-      <% end %>
-    </nav>
+          <%# Cartas %>
+          <%= link_to cards_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'cards' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
+            <svg class="w-5 h-5 <%= controller_name == 'cards' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6M9 15h4" />
+            </svg>
+            <span>Cartas</span>
+          <% end %>
+
+          <%# Coleções %>
+          <%= link_to collections_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'collections' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
+            <svg class="w-5 h-5 <%= controller_name == 'collections' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v10M12 5v14M16 8v9" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 21h14" />
+            </svg>
+            <span>Coleções</span>
+          <% end %>
+
+          <%# Campanhas %>
+          <%= link_to campaigns_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'campaigns' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
+            <svg class="w-5 h-5 <%= controller_name == 'campaigns' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Campanhas</span>
+          <% end %>
+
+        <% else %>
+
+          <%# Minhas Aventuras %>
+          <%= link_to player_campaigns_path, class: "flex items-center space-x-3 px-4 py-3 rounded-lg #{controller_name == 'player_campaigns' ? 'bg-[#1e2548] text-white' : 'text-slate-400 hover:bg-[#161c3a] hover:text-white'} font-medium text-sm transition-colors" do %>
+            <svg class="w-5 h-5 <%= controller_name == 'player_campaigns' ? 'text-violet-400' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Minhas Aventuras</span>
+          <% end %>
+
+        <% end %>
+
+      </nav>
   </div>
 
   <div class="border-t border-[#1e2646] pt-4 flex items-center justify-between">

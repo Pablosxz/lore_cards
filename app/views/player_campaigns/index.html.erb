@@ -1,0 +1,399 @@
+<% content_for :title, "Minhas Aventuras" %>
+
+<div class="space-y-8">
+
+  <div>
+    <h1 class="text-3xl font-bold text-white tracking-tight">
+      Minhas Aventuras
+    </h1>
+
+    <p class="text-slate-400 mt-2">
+      Visualize todas as campanhas das quais você participa e suas cartas disponíveis.
+    </p>
+  </div>
+
+  <% if @campaigns.any? %>
+
+    <% @campaigns.each do |campaign| %>
+
+      <% cards = campaign.collections.includes(:cards).flat_map(&:cards).uniq %>
+
+      <div class="bg-[#0d1129] border border-[#1e2646] rounded-xl p-6">
+
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-white">
+              <%= campaign.name %>
+            </h2>
+
+            <p class="text-slate-400 text-sm mt-1">
+              <%= cards.count %>
+              <%= cards.count == 1 ? "carta disponível" : "cartas disponíveis" %>
+            </p>
+          </div>
+        </div>
+
+        <% if cards.any? %>
+
+        <div style="position:relative;">
+
+          <button
+            type="button"
+            onclick="scrollCards('<%= campaign.id %>', -350)"
+            style="
+              position:absolute;
+              left:-12px;
+              top:50%;
+              transform:translateY(-50%);
+              z-index:20;
+              width:36px;
+              height:36px;
+              border:none;
+              border-radius:999px;
+              background:rgba(30,38,70,.85);
+              color:#cbd5e1;
+              cursor:pointer;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              transition:.2s;
+              backdrop-filter:blur(6px);
+            "
+            onmouseover="this.style.background='#4f46e5';this.style.color='white';this.style.transform='translateY(-50%) scale(1.08)'"
+            onmouseout="this.style.background='rgba(30,38,70,.85)';this.style.color='#cbd5e1';this.style.transform='translateY(-50%) scale(1)'"
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            onclick="scrollCards('<%= campaign.id %>', 350)"
+            style="
+              position:absolute;
+              right:-12px;
+              top:50%;
+              transform:translateY(-50%);
+              z-index:20;
+              width:36px;
+              height:36px;
+              border:none;
+              border-radius:999px;
+              background:rgba(30,38,70,.85);
+              color:#cbd5e1;
+              cursor:pointer;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              transition:.2s;
+              backdrop-filter:blur(6px);
+            "
+            onmouseover="this.style.background='#4f46e5';this.style.color='white';this.style.transform='translateY(-50%) scale(1.08)'"
+            onmouseout="this.style.background='rgba(30,38,70,.85)';this.style.color='#cbd5e1';this.style.transform='translateY(-50%) scale(1)'"
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div
+            id="cards-container-<%= campaign.id %>"
+            style="
+              overflow-x:auto;
+              scroll-behavior:smooth;
+              scrollbar-width:none;
+              -ms-overflow-style:none;
+              padding-bottom:10px;
+            ">
+
+            <div style="display:flex; gap:24px; width:max-content;">
+
+            <% cards.each do |card| %>
+
+              <div
+                style="
+                  width:320px;
+                  min-width:320px;
+                  height:420px;
+                  perspective:1000px;
+                  cursor:pointer;
+                "
+                onclick="this.querySelector('.flipper').classList.toggle('rotated')">
+
+                <div
+                  class="flipper"
+                  style="
+                    position:relative;
+                    width:100%;
+                    height:100%;
+                    transform-style:preserve-3d;
+                    transition:transform .7s;
+                  ">
+
+                  <!-- Frente -->
+                  <div
+                    style="
+                      position:absolute;
+                      inset:0;
+                      background:#0a0d1a;
+                      border:2px solid #1e2646;
+                      border-radius:12px;
+                      padding:12px;
+                      display:flex;
+                      flex-direction:column;
+                      align-items:center;
+                      backface-visibility:hidden;
+                    ">
+
+                    <div
+                      style="
+                        width:100%;
+                        height:190px;
+                        margin-top:12px;
+                        margin-bottom:16px;
+                        border:2px dashed #1e2646;
+                        border-radius:10px;
+                        display:flex;
+                        flex-direction:column;
+                        align-items:center;
+                        justify-content:center;
+                        color:#64748b;
+                      ">
+
+                      <svg class="w-8 h-8 mb-2 opacity-40"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="1.5"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+
+                      <span style="font-size:12px;">
+                        Sem Imagem
+                      </span>
+
+                    </div>
+
+                    <h3 style="color:white;font-weight:bold;font-size:18px;">
+                      <%= card.name %>
+                    </h3>
+
+                    <p style="color:#94a3b8;font-size:12px;margin-bottom:16px;">
+                      <%= card.monster? ? "Monstro" : "Item" %>
+                    </p>
+
+                    <% if card.monster? %>
+
+                      <div
+                        style="
+                          width:100%;
+                          display:grid;
+                          grid-template-columns:1fr 1fr;
+                          gap:6px;
+                          font-size:11px;
+                          color:white;
+                        ">
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Vida</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.health || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Inteligência</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.intelligence || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Força</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.strength || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Físico</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.physical || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Agilidade</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.agility || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Mental</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.mental || 0 %>
+                          </span>
+                        </div>
+
+                      </div>
+
+                    <% else %>
+
+                      <div
+                        style="
+                          width:100%;
+                          display:grid;
+                          grid-template-columns:1fr 1fr;
+                          gap:6px;
+                          font-size:11px;
+                          color:white;
+                        ">
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Peso</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.weight || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Dano</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.damage || 0 %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Raridade</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.rarity.presence || "-" %>
+                          </span>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <span style="font-weight:600;">Consumível</span>
+                          <span style="background:#1e2646;color:#cbd5e1;padding:2px 8px;border-radius:4px;">
+                            <%= card.consumable ? "Sim" : "Não" %>
+                          </span>
+                        </div>
+
+                        <div style="grid-column:span 2;color:white;">
+                          <strong>Bônus:</strong>
+                          <span style="color:#cbd5e1;">
+                            <%= card.active_bonus.presence || "-" %>
+                          </span>
+                        </div>
+
+                      </div>
+
+                    <% end %>
+                  </div>
+
+                  <!-- Verso -->
+                  <div
+                    style="
+                      position:absolute;
+                      inset:0;
+                      background:#e2e8f0;
+                      border-radius:12px;
+                      padding:24px;
+                      display:flex;
+                      flex-direction:column;
+                      justify-content:center;
+                      align-items:center;
+                      text-align:center;
+                      transform:rotateY(180deg);
+                      backface-visibility:hidden;
+                    ">
+
+                    <h4
+                      style="
+                        color:black;
+                        font-weight:bold;
+                        margin-bottom:16px;
+                      ">
+                      DESCRIÇÃO
+                    </h4>
+
+                    <p
+                      style="
+                        color:#334155;
+                        font-size:13px;
+                        line-height:1.5;
+                      ">
+                      <%= card.description.presence || "Nenhuma descrição disponível." %>
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            <% end %>
+
+            </div>
+          </div>
+
+        </div>
+
+        <style>
+          .rotated {
+            transform: rotateY(180deg);
+          }
+        </style>
+
+        <% else %>
+
+          <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-8 text-center">
+            <p class="text-slate-400">
+              Nenhuma carta disponível nesta campanha.
+            </p>
+          </div>
+
+        <% end %>
+
+      </div>
+
+    <% end %>
+
+  <% else %>
+
+    <div class="border-2 border-dashed border-[#1e2646] rounded-xl p-12 text-center">
+      <p class="text-slate-400">
+        Você ainda não foi convidado para nenhuma campanha.
+      </p>
+    </div>
+
+  <% end %>
+
+<script>
+  function scrollCards(campaignId, amount) {
+    const container = document.getElementById(
+      `cards-container-${campaignId}`
+    );
+
+    container.scrollBy({
+      left: amount,
+      behavior: "smooth"
+    });
+  }
+</script>
+
+</div>

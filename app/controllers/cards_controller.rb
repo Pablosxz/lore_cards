@@ -1,6 +1,7 @@
 class CardsController < ApplicationController
   # Garante que apenas Mestre logados acessem as cartas
   before_action :authenticate_user!
+  before_action :require_master!
 
   def index
     if params[:query].present?

@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   post "ai/improve_text", to: "ai#improve_text", as: :ai_improve_text
 
+  devise_for :users
+
+  # Área dos jogadores
+  resources :player_campaigns, only: [ :index ]
+
+  # Área dos mestres
   resources :campaigns do
     member do
       post :add_collection
@@ -10,29 +16,34 @@ Rails.application.routes.draw do
       delete :remove_player
     end
   end
+
   resources :collections do
     member do
       post :add_card
       delete :remove_card
     end
   end
-  get "cards/index"
-  get "cards/new"
-  devise_for :users
 
   resources :cards
 
-  root "dashboard#index"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Root para usuários autenticados
+  authenticated :user, ->(u) { u.master? } do
+    root "dashboard#index", as: :authenticated_master_root
+  end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  authenticated :user, ->(u) { u.player? } do
+    root "player_campaigns#index", as: :authenticated_player_root
+  end
+
+  # Root para visitantes
+  unauthenticated do
+    root to: redirect("/users/sign_in"), as: :unauthenticated_root
+  end
+
+  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/*
+  # PWA
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
