@@ -77,6 +77,30 @@ class CollectionsController < ApplicationController
     redirect_to collection_path(@collection), notice: "Carta removida da coleção."
   end
 
+  def generate_image
+    raw_prompt = params[:description].to_s.strip
+
+    if raw_prompt.blank?
+      render json: { error: "A descrição para gerar a imagem é obrigatória." }, status: :bad_request
+      return
+    end
+
+    begin
+      sanitized_prompt = PromptSanitizerService.new(raw_prompt, context: :collection).call
+      puts "[Leonardo Prompt Collection] #{sanitized_prompt}"
+
+      result = LeonardoImageGenerationService.new.call(prompt: sanitized_prompt)
+
+      if result[:success]
+        render json: { image_url: result[:image_url] }
+      else
+        render json: { error: result[:error] }, status: result[:status]
+      end
+    rescue StandardError => e
+      render json: { error: "Erro inesperado: #{e.message}" }, status: :internal_server_error
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_collection
@@ -85,6 +109,6 @@ class CollectionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def collection_params
-      params.require(:collection).permit(:name, :artistic_style)
+      params.require(:collection).permit(:name, :artistic_style, :image_url)
     end
 end

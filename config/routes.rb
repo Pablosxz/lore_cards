@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   end
 
   resources :collections do
+    collection do
+      post :generate_image
+    end
+
     member do
       post :add_card
       delete :remove_card

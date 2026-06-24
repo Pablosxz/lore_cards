@@ -41,6 +41,12 @@
   </div>
 </div>
 
+<% if @collection.image_url.present? %>
+  <div class="mb-8 rounded-xl overflow-hidden border border-[#1e2646] bg-[#0a0d1a]">
+    <img src="<%= @collection.image_url %>" alt="Imagem da coleção" class="w-full h-64 object-cover">
+  </div>
+<% end %>
+
 <%# Ações: nova carta e vincular existente %>
 <div class="mb-8 flex items-center gap-3">
   <%= link_to new_card_path(collection_id: @collection.id), data: { turbo_frame: "card_modal" },
