@@ -9,6 +9,8 @@
 
     <%= form_with model: card, local: true, class: "flex gap-8", id: "modal-form" do |f| %>
       <%= f.hidden_field :collection_id if card.collection_id.present? %>
+      <%= f.hidden_field :image_url, id: "input-image_url" %>
+
       <div class="flex-1 space-y-6">
         <% if card.errors.any? %>
           <div class="bg-red-950/50 border border-red-800 text-red-200 p-4 rounded-md text-sm space-y-1 mb-4">
@@ -59,8 +61,14 @@
         </div>
 
         <div class="space-y-2">
-          <%= f.label :description, "Descrição da carta", class: "block text-sm text-slate-300" %>
-          <%= f.text_area :description, rows: 3, class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white focus:outline-none focus:border-violet-500" %>
+          <div class="flex items-center justify-between">
+            <%= f.label :description, "Descrição da carta", class: "block text-sm text-slate-300" %>
+            <button type="button" id="btn-generate-image" class="text-xs flex items-center gap-1.5 text-violet-400 hover:text-violet-300 transition-colors cursor-pointer group">
+              <svg class="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              Solicitar Imagem por IA
+            </button>
+          </div>
+          <%= f.text_area :description, id: "input-description", rows: 3, class: "w-full bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 text-white focus:outline-none focus:border-violet-500" %>
         </div>
 
         <div class="pt-4 flex justify-center">
@@ -70,11 +78,23 @@
 
       <div class="w-72 flex-shrink-0 flex items-center justify-center">
          <div class="w-full bg-[#0a0d1a] border-2 border-[#1e2646] rounded-xl p-3 flex flex-col items-center">
-            <div class="w-full h-48 bg-[#11162d] border-2 border-dashed border-[#1e2646] rounded-lg mb-4 flex flex-col items-center justify-center text-slate-500 group-hover:bg-[#151b36] group-hover:border-[#2a3354] transition-all mt-4">
-                <svg class="w-8 h-8 mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span class="text-xs font-semibold uppercase tracking-wider opacity-60">Sem Imagem</span>
+            <div id="preview-image-container" class="w-full h-48 bg-[#11162d] border-2 border-dashed border-[#1e2646] rounded-lg mb-4 flex flex-col items-center justify-center text-slate-500 group-hover:bg-[#151b36] group-hover:border-[#2a3354] transition-all mt-4 overflow-hidden relative">
+                <% if card.image_url.present? %>
+                  <img src="<%= card.image_url %>" id="preview-image" class="w-full h-full object-cover">
+                <% else %>
+                  <div id="preview-placeholder" class="flex flex-col items-center justify-center">
+                    <svg class="w-8 h-8 mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-xs font-semibold uppercase tracking-wider opacity-60">Sem Imagem</span>
+                  </div>
+                  <img id="preview-image" class="w-full h-full object-cover hidden">
+                <% end %>
+                
+                <div id="image-loading" class="absolute inset-0 bg-black/60 hidden items-center justify-center flex-col gap-2">
+                  <div class="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+                  <span class="text-[10px] text-white font-medium">Invocando Imagem...</span>
+                </div>
             </div>
             
             <h3 id="preview-name" class="text-white font-bold text-lg text-center w-full truncate"><%= card.name.presence || "Nome da carta" %></h3>
@@ -103,6 +123,8 @@
 <script>
   (function() {
     const inputName = document.getElementById("input-name");
+    const inputDescription = document.getElementById("input-description");
+    const inputImageUrl = document.getElementById("input-image_url");
     const radioMonster = document.getElementById("radio-monster");
     const radioItem = document.getElementById("radio-item");
     const formMonsterAttrs = document.getElementById("form-monster-attrs");
@@ -111,6 +133,10 @@
     const previewItemAttrs = document.getElementById("preview-item-attrs");
     const previewName = document.getElementById("preview-name");
     const previewType = document.getElementById("preview-type");
+    const btnGenerateImage = document.getElementById("btn-generate-image");
+    const imageLoading = document.getElementById("image-loading");
+    const previewImage = document.getElementById("preview-image");
+    const previewPlaceholder = document.getElementById("preview-placeholder");
 
     if (inputName) inputName.addEventListener("input", (e) => previewName.textContent = e.target.value || "Nome da carta");
 
@@ -146,5 +172,48 @@
     const inputConsumable = document.getElementById("input-consumable");
     const previewConsumable = document.getElementById("preview-val-consumable");
     if (inputConsumable && previewConsumable) inputConsumable.addEventListener("change", (e) => previewConsumable.textContent = e.target.checked ? "Sim" : "Não");
+
+    if (btnGenerateImage) {
+      btnGenerateImage.addEventListener("click", async () => {
+        const description = inputDescription.value;
+        if (!description) {
+          alert("Por favor, preencha a descrição para gerar a imagem.");
+          return;
+        }
+
+        btnGenerateImage.disabled = true;
+        imageLoading.classList.remove("hidden");
+        imageLoading.classList.add("flex");
+
+        try {
+          const response = await fetch("/cards/generate_image", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ description })
+          });
+
+          const data = await response.json();
+
+          if (data.image_url) {
+            inputImageUrl.value = data.image_url;
+            previewImage.src = data.image_url;
+            previewImage.classList.remove("hidden");
+            if (previewPlaceholder) previewPlaceholder.classList.add("hidden");
+          } else {
+            alert(data.error || "Erro ao gerar imagem.");
+          }
+        } catch (error) {
+          console.error("Erro:", error);
+          alert("Ocorreu um erro ao solicitar a imagem.");
+        } finally {
+          btnGenerateImage.disabled = false;
+          imageLoading.classList.add("hidden");
+          imageLoading.classList.remove("flex");
+        }
+      });
+    }
   })();
 </script>

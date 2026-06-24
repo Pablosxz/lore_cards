@@ -24,7 +24,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :cards
+  resources :cards do
+    collection do
+      post :generate_image
+    end
+  end
 
   # Root para usuários autenticados
   authenticated :user, ->(u) { u.master? } do

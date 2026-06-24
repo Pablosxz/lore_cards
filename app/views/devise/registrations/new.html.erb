@@ -72,13 +72,7 @@
 
               <%# Jogador %>
               <label class="cursor-pointer">
-                <input
-                  type="radio"
-                  name="user[role]"
-                  value="player"
-                  class="hidden role-option"
-                  checked
-                >
+                <%= f.radio_button :role, "player", class: "hidden role-option", checked: true %>
 
                 <div class="role-card selected-role rounded-xl border border-violet-500 bg-violet-600/20 p-4 transition-all duration-200">
 
@@ -101,12 +95,7 @@
 
               <%# Mestre %>
               <label class="cursor-pointer">
-                <input
-                  type="radio"
-                  name="user[role]"
-                  value="master"
-                  class="hidden role-option"
-                >
+                <%= f.radio_button :role, "master", class: "hidden role-option" %>
 
                 <div class="role-card rounded-xl border border-[#2a3354] bg-[#1a2035] p-4 transition-all duration-200 hover:border-violet-500 hover:bg-[#202847]">
 
@@ -157,7 +146,7 @@
         })
 
         const selectedCard = option.nextElementSibling
-        const selectedBadge = selectedCard.querySelector(".selected-badge")
+        if (!selectedCard) return
 
         selectedCard.classList.add(
           "selected-role",
@@ -167,7 +156,10 @@
           "ring-violet-500"
         )
 
-        selectedBadge.classList.remove("hidden")
+        const selectedBadge = selectedCard.querySelector(".selected-badge")
+        if (selectedBadge) {
+          selectedBadge.classList.remove("hidden")
+        }
       })
     })
   })

@@ -18,6 +18,10 @@ class ApplicationController < ActionController::Base
       :sign_up,
       keys: [ :username, :email, :role ]
     )
+    devise_parameter_sanitizer.permit(
+      :account_update,
+      keys: [ :username, :email, :role ]
+    )
   end
 
   # Sobrescreve o destino padrão do Devise após o logout
