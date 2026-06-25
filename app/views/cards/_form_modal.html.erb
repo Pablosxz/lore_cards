@@ -42,22 +42,37 @@
           </div>
         </div>
 
-        <div id="form-monster-attrs" class="grid grid-cols-2 gap-4">
+        <div id="form-monster-attrs" class="grid grid-cols-2 gap-3">
           <% ["health:Vida", "intelligence:Inteligência", "strength:Força", "physical:Físico", "agility:Agilidade", "mental:Mental"].each do |attr| %>
             <% field, label = attr.split(":") %>
-            <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5">
-              <%= f.label field, label, class: "text-sm text-slate-300" %>
-              <%= f.number_field field, id: "input-#{field}", class: "w-16 bg-transparent text-right text-white focus:outline-none" %>
+            <div class="flex flex-col bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+              <%= f.label field, label, class: "text-xs text-slate-400 mb-1" %>
+              <%= f.number_field field, id: "input-#{field}", min: 0, max: 100, value: card.send(field) || 0, class: "no-spinner w-full bg-transparent text-white text-lg font-semibold focus:outline-none focus:border-b focus:border-violet-500" %>
             </div>
           <% end %>
         </div>
 
-        <div id="form-item-attrs" class="hidden grid grid-cols-2 gap-4">
-          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :weight, "Peso", class: "text-sm text-slate-300" %><%= f.number_field :weight, step: "0.1", id: "input-weight", class: "w-16 bg-transparent text-right text-white focus:outline-none" %></div>
-          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :damage, "Dano", class: "text-sm text-slate-300" %><%= f.number_field :damage, id: "input-damage", class: "w-16 bg-transparent text-right text-white focus:outline-none" %></div>
-          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :rarity, "Raridade", class: "text-sm text-slate-300" %><%= f.text_field :rarity, id: "input-rarity", placeholder: "-", class: "w-20 bg-transparent text-right text-white text-xs focus:outline-none" %></div>
-          <div class="flex items-center justify-between bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-1.5"><%= f.label :active_bonus, "Bônus", class: "text-sm text-slate-300" %><%= f.text_field :active_bonus, id: "input-active_bonus", placeholder: "-", class: "w-20 bg-transparent text-right text-white text-xs focus:outline-none" %></div>
-          <div class="col-span-2 flex items-center space-x-3 bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-2 mt-2"><%= f.check_box :consumable, id: "input-consumable", class: "h-4 w-4 rounded bg-transparent border-[#1e2646] text-violet-600 focus:ring-violet-500" %><%= f.label :consumable, "Este item é consumível", class: "text-sm text-slate-300 cursor-pointer" %></div>
+        <div id="form-item-attrs" class="hidden grid grid-cols-2 gap-3">
+          <div class="flex flex-col bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+            <%= f.label :weight, "Peso", class: "text-xs text-slate-400 mb-1" %>
+            <%= f.number_field :weight, step: "0.1", id: "input-weight", min: 0, max: 100, value: card.weight || 0, class: "no-spinner w-full bg-transparent text-white text-lg font-semibold focus:outline-none" %>
+          </div>
+          <div class="flex flex-col bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+            <%= f.label :damage, "Dano", class: "text-xs text-slate-400 mb-1" %>
+            <%= f.number_field :damage, id: "input-damage", min: 0, max: 100, value: card.damage || 0, class: "no-spinner w-full bg-transparent text-white text-lg font-semibold focus:outline-none" %>
+          </div>
+          <div class="flex flex-col bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+            <%= f.label :rarity, "Raridade", class: "text-xs text-slate-400 mb-1" %>
+            <%= f.text_field :rarity, id: "input-rarity", placeholder: "-", class: "w-full bg-transparent text-white text-base focus:outline-none" %>
+          </div>
+          <div class="flex flex-col bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+            <%= f.label :active_bonus, "Bônus Ativo", class: "text-xs text-slate-400 mb-1" %>
+            <%= f.text_field :active_bonus, id: "input-active_bonus", placeholder: "-", class: "w-full bg-transparent text-white text-base focus:outline-none" %>
+          </div>
+          <div class="col-span-2 flex items-center space-x-3 bg-[#11162d] border border-[#1e2646] rounded-md px-4 py-3">
+            <%= f.check_box :consumable, id: "input-consumable", class: "h-5 w-5 rounded bg-transparent border-[#1e2646] text-violet-600 focus:ring-violet-500 cursor-pointer" %>
+            <%= f.label :consumable, "Este item é consumível", class: "text-sm text-slate-300 cursor-pointer" %>
+          </div>
         </div>
 
         <div class="space-y-2">
@@ -119,6 +134,12 @@
     <% end %>
   </div>
 </div>
+
+<style>
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .no-spinner { -moz-appearance: textfield; }
+</style>
 
 <script>
   (function() {
