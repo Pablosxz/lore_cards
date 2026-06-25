@@ -75,7 +75,8 @@ class CardsController < ApplicationController
 
     begin
       card_context = params[:category].to_s == "monster" ? :card_monster : :card_item
-      sanitized_prompt = PromptSanitizerService.new(raw_prompt, context: card_context).call
+      theme = params[:theme].to_s.strip.presence
+      sanitized_prompt = PromptSanitizerService.new(raw_prompt, context: card_context, theme: theme).call
       puts "[Leonardo Prompt] #{sanitized_prompt}"
       result = LeonardoImageGenerationService.new.call(prompt: sanitized_prompt)
 

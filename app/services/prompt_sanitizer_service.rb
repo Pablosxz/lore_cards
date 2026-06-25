@@ -10,13 +10,23 @@ class PromptSanitizerService
   DEFAULT_CONTEXT = :card_item
   VALID_CONTEXTS = %i[card_item card_monster collection].freeze
 
+  THEME_MODIFIERS = {
+    "sombrio"  => "dark, grim, shadowy, desaturated palette, oppressive atmosphere, dim lighting",
+    "epico"    => "epic, heroic, glorious, dramatic golden lighting, grand scale, triumphant",
+    "mistico"  => "mystical, ethereal, arcane, glowing runes, magical mist, otherworldly",
+    "macabro"  => "macabre, gothic, horror, decayed, cursed, skeletal motifs, eerie",
+    "selvagem" => "wild, primal, natural, organic textures, rough, untamed, ferocious",
+    "medieval" => "classic medieval, heraldic, stone and iron, torchlit, traditional fantasy"
+  }.freeze
+
   ITEM_FALLBACK_PROMPT = "A single high-quality 2D digital illustration of a fantasy RPG item inspired by: %{input}. The object is visually striking, polished, and clearly centered. Isolated on a solid dark background. Dungeons and dragons item asset, RPG concept art, vibrant colors, masterpiece, high detail.".freeze
   MONSTER_FALLBACK_PROMPT = "A single high-quality 2D digital illustration of a fantasy RPG monster inspired by: %{input}. The creature has a dramatic silhouette, distinctive anatomy, and threatening details. Isolated on a solid dark background. Dungeons and dragons monster asset, RPG concept art, vibrant colors, masterpiece, high detail.".freeze
   COLLECTION_FALLBACK_PROMPT = "A high-quality 2D key art illustration for a fantasy RPG collection inspired by: %{input}. A cohesive thematic scene with atmosphere, landmarks, and strong visual identity. Cinematic composition, Dungeons and dragons worldbuilding key art, RPG concept art, vibrant colors, masterpiece, high detail.".freeze
 
-  def initialize(user_input, context: DEFAULT_CONTEXT)
+  def initialize(user_input, context: DEFAULT_CONTEXT, theme: nil)
     @user_input = user_input.to_s.strip
     @context = normalize_context(context)
+    @theme_modifier = THEME_MODIFIERS[theme.to_s.downcase]
   end
 
   def call
@@ -98,11 +108,13 @@ class PromptSanitizerService
       Return only the final single prompt string.
     RULES
 
+    theme_instruction = @theme_modifier ? "\nIMPORTANT: The image style must emphasize: #{@theme_modifier}. Reflect this tone throughout the entire description." : ""
+
     case @context
     when :collection
       <<~INSTRUCTION
         You are an expert RPG worldbuilding art curator for collection key art.
-        #{base_rules}
+        #{base_rules}#{theme_instruction}
         Follow this exact formula:
         [Collection Key Art Type] + [Detailed Environment and Theme based on user input] + [Cinematic Scene Composition] + [Dungeons and dragons worldbuilding key art, RPG concept art, vibrant colors, masterpiece, high detail].
 
@@ -113,7 +125,7 @@ class PromptSanitizerService
     when :card_monster
       <<~INSTRUCTION
         You are an expert RPG card art curator for monster illustrations.
-        #{base_rules}
+        #{base_rules}#{theme_instruction}
         Follow this exact formula:
         [Type of Creature Asset] + [Detailed Physical Description based on user input] + [Isolated on a solid dark background] + [Dungeons and dragons monster asset, RPG concept art, vibrant colors, masterpiece, high detail].
 
@@ -124,7 +136,7 @@ class PromptSanitizerService
     else
       <<~INSTRUCTION
         You are an expert RPG card art curator for item illustrations.
-        #{base_rules}
+        #{base_rules}#{theme_instruction}
         Follow this exact formula:
         [Type of Asset] + [Detailed Physical Description based on user input] + [Isolated on a solid dark background] + [Dungeons and dragons item asset, RPG concept art, vibrant colors, masterpiece, high detail].
 
