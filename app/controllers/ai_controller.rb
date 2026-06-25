@@ -17,8 +17,9 @@ class AiController < ApplicationController
     prompt = if mode == "fix"
       <<~PROMPT
         Corrija a ortografia, pontuação e semântica do texto abaixo sem alterar
-        seu conteúdo ou tom. Mantenha o idioma original (português). Retorne
-        apenas o texto corrigido, sem explicações adicionais.
+        seu conteúdo ou tom. Mantenha o idioma original (português) e o tamanho
+        aproximado do texto original. Retorne apenas o texto corrigido, sem
+        explicações adicionais.
 
         Texto original:
         #{text}
@@ -27,8 +28,9 @@ class AiController < ApplicationController
       <<~PROMPT
         Você é um assistente criativo especializado em RPG de mesa e worldbuilding.
         Melhore o texto abaixo tornando-o mais descritivo, imersivo e adequado para
-        um jogo de fantasia. Mantenha o idioma original (português). Retorne apenas
-        o texto melhorado, sem explicações adicionais.
+        um jogo de fantasia. Mantenha o idioma original (português) e um tamanho
+        próximo ao original — enriqueça o conteúdo, não expanda indefinidamente.
+        Retorne apenas o texto melhorado, sem explicações adicionais.
 
         Texto original:
         #{text}
@@ -60,8 +62,7 @@ class AiController < ApplicationController
         }
       ],
       generationConfig: {
-        temperature: temperature,
-        maxOutputTokens: 500
+        temperature: temperature
       }
     }.to_json
 
