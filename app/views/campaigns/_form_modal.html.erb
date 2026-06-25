@@ -16,7 +16,7 @@
 
     <h2 class="text-2xl font-bold text-white mb-6"><%= title %></h2>
 
-    <%= form_with model: campaign, local: true do |f| %>
+    <%= form_with model: campaign, data: { turbo_frame: "_top" } do |f| %>
       <% if campaign.errors.any? %>
         <div class="bg-red-950/50 border border-red-800 text-red-200 p-4 rounded-md text-sm space-y-1 mb-5">
           <p class="font-semibold"><%= t('campaigns.form.errors_header', count: campaign.errors.count) %></p>

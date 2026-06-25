@@ -16,7 +16,7 @@
 
     <h2 class="text-2xl font-bold text-white mb-6"><%= title %></h2>
 
-    <%= form_with model: collection, local: true do |f| %>
+    <%= form_with model: collection, data: { turbo_frame: "_top" } do |f| %>
       <%= f.hidden_field :image_url, id: "collection-image-url" %>
 
       <% if collection.errors.any? %>

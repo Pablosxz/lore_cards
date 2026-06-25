@@ -7,7 +7,7 @@
 
     <h2 class="text-2xl font-bold text-white mb-6"><%= title %></h2>
 
-    <%= form_with model: card, local: true, class: "flex gap-8", id: "modal-form" do |f| %>
+    <%= form_with model: card, class: "flex gap-8", id: "modal-form", data: { turbo_frame: "_top" } do |f| %>
       <%= f.hidden_field :collection_id if card.collection_id.present? %>
       <%= f.hidden_field :image_url, id: "input-image_url" %>
 
