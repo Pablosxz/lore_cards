@@ -72,7 +72,7 @@
 
               <%# Jogador %>
               <label class="cursor-pointer">
-                <%= f.radio_button :role, "player", class: "hidden role-option", checked: true %>
+                <%= f.radio_button :role, "player", class: "hidden role-option", checked: resource.role.blank? || resource.role == "player" %>
 
                 <div class="role-card selected-role rounded-xl border border-violet-500 bg-violet-600/20 p-4 transition-all duration-200">
 
@@ -120,47 +120,30 @@
           </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const options = document.querySelectorAll(".role-option")
+  document.querySelectorAll(".role-option").forEach((option) => {
+    const card = option.nextElementSibling
+    if (!card) return
 
-    options.forEach((option) => {
-      option.addEventListener("change", () => {
+    if (option.checked) {
+      card.classList.remove("border-[#2a3354]", "bg-[#1a2035]")
+      card.classList.add("border-violet-500", "bg-violet-600/20")
+    } else {
+      card.classList.remove("border-violet-500", "bg-violet-600/20")
+      card.classList.add("border-[#2a3354]", "bg-[#1a2035]")
+    }
 
-        document.querySelectorAll(".role-card").forEach((card) => {
-          card.classList.remove(
-            "selected-role",
-            "border-violet-500",
-            "bg-violet-600/20",
-            "ring-2",
-            "ring-violet-500"
-          )
-
-          card.classList.add(
-            "border-[#2a3354]",
-            "bg-[#1a2035]"
-          )
-        })
-
-        document.querySelectorAll(".selected-badge").forEach((badge) => {
-          badge.classList.add("hidden")
-        })
-
-        const selectedCard = option.nextElementSibling
-        if (!selectedCard) return
-
-        selectedCard.classList.add(
-          "selected-role",
-          "border-violet-500",
-          "bg-violet-600/20",
-          "ring-2",
-          "ring-violet-500"
-        )
-
-        const selectedBadge = selectedCard.querySelector(".selected-badge")
-        if (selectedBadge) {
-          selectedBadge.classList.remove("hidden")
-        }
+    option.addEventListener("change", () => {
+      document.querySelectorAll(".role-option").forEach((opt) => {
+        const c = opt.nextElementSibling
+        if (!c) return
+        c.classList.remove("border-violet-500", "bg-violet-600/20")
+        c.classList.add("border-[#2a3354]", "bg-[#1a2035]")
       })
+
+      const selectedCard = option.nextElementSibling
+      if (!selectedCard) return
+      selectedCard.classList.remove("border-[#2a3354]", "bg-[#1a2035]")
+      selectedCard.classList.add("border-violet-500", "bg-violet-600/20")
     })
   })
 </script>
